@@ -1,6 +1,0 @@
-# Elastic Weight Consolidation (Kirkpatrick et al., PNAS 2017)
-name: ewc
-method: ewc
-params:
-  ewc_lambda: 100.0               # сила штрафа за отход от важных весов
-  fisher_samples: 200             # сколько примеров для оценки матрицы Фишера

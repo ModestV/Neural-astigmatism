@@ -1,4 +1,4 @@
-.PHONY: install install-gpu install-dev test lint format train app
+.PHONY: install install-gpu install-dev test lint format
 
 install:            ## Основные зависимости + пакет peft_lab в режиме разработки
 	pip install -r requirements.txt
@@ -22,8 +22,3 @@ format:
 	ruff check --fix .
 	ruff format .
 
-train:              ## make train ADAPTER=programmer
-	python scripts/train.py --adapter $(ADAPTER)
-
-app:
-	python app/app.py

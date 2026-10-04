@@ -1,6 +1,0 @@
-# Replay-буфер: к доменным данным подмешиваются общие примеры
-name: replay
-method: replay
-params:
-  replay_dataset: data/replay/general.jsonl
-  replay_ratio: 0.2               # доля общих примеров в каждой эпохе

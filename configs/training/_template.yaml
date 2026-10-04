@@ -1,0 +1,12 @@
+# Шаблон метода обучения. Примеры имён: lora, qlora, dora.
+name: lora
+method: lora                      # lora | qlora | dora
+r: 16                             # ранг LoRA
+lora_alpha: 32                    # масштаб: итоговый множитель alpha / r
+lora_dropout: 0.05
+load_in_4bit: false               # true для QLoRA (NF4, bitsandbytes)
+use_dora: false                   # true для DoRA
+learning_rate: 2.0e-4
+num_epochs: 3
+batch_size: 4
+gradient_accumulation_steps: 4

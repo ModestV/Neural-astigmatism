@@ -21,4 +21,5 @@ jobs:
           ruff check .
           ruff format --check .
       - name: Unit-тесты (без GPU)
-        run: pytest -m "not gpu and not slow"
+        # exit code 5 = тесты ещё не написаны, это не ошибка
+        run: pytest -m "not gpu and not slow" || [ $? -eq 5 ]

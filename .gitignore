@@ -33,3 +33,6 @@ wandb/
 .vscode/
 .idea/
 .DS_Store
+
+# Личные инструкции для ИИ-ассистентов
+CLAUDE.local.md

@@ -1,4 +1,5 @@
-# Оценка: деградация базовых знаний + качество в домене + стоимость обучения
+# Шаблон набора оценки.
+name: default
 general_benchmarks:               # проверка catastrophic forgetting
   - mmlu
   - hellaswag
