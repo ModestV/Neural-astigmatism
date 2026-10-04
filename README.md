@@ -1,4 +1,4 @@
-# peft-lab
+# Neural-astigmatism
 
 Анализ и практическое применение технологий fine-tune: локальное параметрически-эффективное
 дообучение (PEFT) LLM с гарантированной приватностью данных.
@@ -58,8 +58,8 @@ outputs/           обученные адаптеры и чекпоинты (с
 Рекомендуется Python 3.11 или 3.12.
 
 ```bash
-git clone https://github.com/semenenkoe964-lang/peft-lab.git
-cd peft-lab
+git clone https://github.com/ModestV/Neural-astigmatism.git
+cd Neural-astigmatism
 python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
 
 make install          # основные зависимости (или make install-gpu на Linux + NVIDIA)

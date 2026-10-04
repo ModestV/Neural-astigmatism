@@ -6,7 +6,7 @@ the structure or conventions change.
 
 ## Project
 
-**peft-lab** is a team research project: "Analysis and practical application of fine-tuning technologies".
+**Neural-astigmatism** is a team research project: "Analysis and practical application of fine-tuning technologies".
 We build an application for **local** parameter-efficient fine-tuning (PEFT) of LLMs, so a user can train a
 personal assistant on their own data without sending anything to the cloud.
 
@@ -102,7 +102,7 @@ Run `make lint` and `make test` before proposing a commit.
 - Code, identifiers, comments, docstrings and commit messages: **English**.
   User-facing documentation (`README.md`, `docs/`, folder READMEs): **Russian**.
 - Ruff, line length 100, target Python 3.10. Type hints on public functions.
-- Use `src/` layout: import as `from peft_lab... import ...`.
+- Use `src/` layout: import as `from peft_lab... import ...` (the Python package is named `peft_lab`).
 - Import heavy libraries (`torch`, `transformers`, `bitsandbytes`, `unsloth`) lazily or only in modules that need
   them, so that config code and unit tests run without them.
 - Code must work on CPU (slowly) and must not crash at import time when there is no GPU.
