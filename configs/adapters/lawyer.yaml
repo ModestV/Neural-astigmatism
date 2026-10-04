@@ -1,0 +1,7 @@
+name: lawyer
+owner: semenenkoe964-lang
+domain: lawyer
+base_model: qwen2.5-1.5b-instruct
+dataset: data/processed/lawyer.jsonl
+training: qlora
+forgetting: replay

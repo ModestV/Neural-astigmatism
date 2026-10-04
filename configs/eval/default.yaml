@@ -1,0 +1,13 @@
+# Оценка: деградация базовых знаний + качество в домене + стоимость обучения
+general_benchmarks:               # проверка catastrophic forgetting
+  - mmlu
+  - hellaswag
+  - arc_easy
+domain_metrics:
+  - perplexity
+  - rouge_l
+cost_metrics:
+  - gpu_memory_peak_mb
+  - train_time_sec
+  - flops
+max_samples_per_benchmark: 500

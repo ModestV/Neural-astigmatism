@@ -1,0 +1,6 @@
+name: qwen2.5-1.5b-instruct
+hf_id: Qwen/Qwen2.5-1.5B-Instruct
+owner: semenenkoe964-lang
+max_seq_length: 2048
+gated: false
+lora_target_modules: [q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj]

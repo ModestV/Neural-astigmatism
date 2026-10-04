@@ -1,0 +1,35 @@
+# Секреты
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+venv/
+.venv/
+
+# Данные: в git только README и .gitkeep
+data/**/*
+!data/**/
+!data/README.md
+!data/**/.gitkeep
+
+# Веса, чекпоинты, логи экспериментов
+outputs/
+mlruns/
+wandb/
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.gguf
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store

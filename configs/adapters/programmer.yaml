@@ -1,0 +1,7 @@
+name: programmer
+owner: semenenkoe964-lang
+domain: programmer
+base_model: qwen2.5-1.5b-instruct
+dataset: data/processed/programmer.jsonl
+training: qlora
+forgetting: replay

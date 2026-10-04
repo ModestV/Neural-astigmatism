@@ -1,0 +1,9 @@
+# Шаблон адаптера. Скопируйте в <name>.yaml, где <name> совпадает с полем name.
+name: my-adapter                  # уникальное имя = имя файла без .yaml
+owner: github-username
+domain: programmer                # роль/домен: programmer, lawyer, tutor, ...
+base_model: qwen2.5-1.5b-instruct # имя файла из configs/base_models/
+dataset: data/processed/my-adapter.jsonl
+training: lora                    # имя файла из configs/training/: lora | qlora | dora
+forgetting: replay                # имя файла из configs/forgetting/: none | replay | ewc
+# output_dir: outputs/adapters/<base_model>/<name>   # по умолчанию

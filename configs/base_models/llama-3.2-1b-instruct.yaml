@@ -1,0 +1,6 @@
+name: llama-3.2-1b-instruct
+hf_id: meta-llama/Llama-3.2-1B-Instruct
+owner: semenenkoe964-lang
+max_seq_length: 2048
+gated: true
+lora_target_modules: [q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj]

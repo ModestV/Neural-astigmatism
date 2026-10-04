@@ -1,0 +1,16 @@
+# Основные зависимости (CPU/GPU, любая ОС)
+torch>=2.4
+transformers>=4.46
+peft>=0.13
+trl>=0.12
+datasets>=3.0
+accelerate>=1.0
+pyyaml>=6.0
+python-dotenv>=1.0
+
+# Трекинг экспериментов
+mlflow>=2.17
+wandb>=0.18
+
+# UI
+gradio>=5.0

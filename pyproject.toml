@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "peft-lab"
+version = "0.1.0"
+description = "Локальное PEFT-дообучение LLM: LoRA/QLoRA/DoRA, переносимые адаптеры, контроль catastrophic forgetting"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+dynamic = ["dependencies"]
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+markers = [
+    "gpu: тест требует NVIDIA GPU",
+    "slow: долгий тест (загрузка моделей, обучение)",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

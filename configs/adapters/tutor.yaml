@@ -1,0 +1,7 @@
+name: tutor
+owner: semenenkoe964-lang
+domain: tutor
+base_model: qwen2.5-1.5b-instruct
+dataset: data/processed/tutor.jsonl
+training: qlora
+forgetting: replay
