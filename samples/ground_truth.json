@@ -1,0 +1,1343 @@
+{
+  "description": "Эталонная разметка тестовых чертежей. bbox = [x, y, w, h], ось Y вниз.",
+  "symbols": {
+    "socket": "Розетка",
+    "switch": "Выключатель",
+    "lamp": "Светильник",
+    "box": "Распаячная коробка"
+  },
+  "files": {
+    "plan.svg": {
+      "units": "единицы viewBox (мм)",
+      "pages": {
+        "1": [
+          {
+            "symbol": "socket",
+            "bbox": [
+              327.0,
+              36.0,
+              6.0,
+              6.0
+            ],
+            "angle": 0.0,
+            "legend": true
+          },
+          {
+            "symbol": "switch",
+            "bbox": [
+              328.5,
+              52.4,
+              7.5,
+              6.1
+            ],
+            "angle": 0.0,
+            "legend": true
+          },
+          {
+            "symbol": "lamp",
+            "bbox": [
+              326.5,
+              68.5,
+              7.0,
+              7.0
+            ],
+            "angle": 0.0,
+            "legend": true
+          },
+          {
+            "symbol": "box",
+            "bbox": [
+              328.0,
+              85.0,
+              4.0,
+              4.0
+            ],
+            "angle": 0.0,
+            "legend": true
+          },
+          {
+            "symbol": "lamp",
+            "bbox": [
+              91.5,
+              66.5,
+              7.0,
+              7.0
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              40.0,
+              57.0,
+              6.0,
+              6.0
+            ],
+            "angle": 90,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              40.0,
+              92.0,
+              6.0,
+              6.0
+            ],
+            "angle": 90,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              97.0,
+              20.0,
+              6.0,
+              6.0
+            ],
+            "angle": 180,
+            "legend": false
+          },
+          {
+            "symbol": "switch",
+            "bbox": [
+              138.5,
+              100.4,
+              7.5,
+              6.1
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "box",
+            "bbox": [
+              58.0,
+              30.0,
+              4.0,
+              4.0
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "lamp",
+            "bbox": [
+              91.5,
+              166.5,
+              7.0,
+              7.0
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              40.0,
+              147.0,
+              6.0,
+              6.0
+            ],
+            "angle": 90,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              144.0,
+              187.0,
+              6.0,
+              6.0
+            ],
+            "angle": 270,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              72.0,
+              214.0,
+              6.0,
+              6.0
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              112.0,
+              214.0,
+              6.0,
+              6.0
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "switch",
+            "bbox": [
+              46.5,
+              127.4,
+              7.5,
+              6.1
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "box",
+            "bbox": [
+              128.0,
+              133.0,
+              4.0,
+              4.0
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "lamp",
+            "bbox": [
+              186.5,
+              66.5,
+              7.0,
+              7.0
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "lamp",
+            "bbox": [
+              256.5,
+              66.5,
+              7.0,
+              7.0
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "lamp",
+            "bbox": [
+              186.5,
+              166.5,
+              7.0,
+              7.0
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "lamp",
+            "bbox": [
+              256.5,
+              166.5,
+              7.0,
+              7.0
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              294.0,
+              47.0,
+              6.0,
+              6.0
+            ],
+            "angle": 270,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              294.0,
+              107.0,
+              6.0,
+              6.0
+            ],
+            "angle": 270,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              294.0,
+              182.0,
+              6.0,
+              6.0
+            ],
+            "angle": 270,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              197.0,
+              20.0,
+              6.0,
+              6.0
+            ],
+            "angle": 180,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              247.0,
+              214.0,
+              6.0,
+              6.0
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              222.402,
+              114.804,
+              5.598,
+              6.696
+            ],
+            "angle": 30,
+            "legend": false
+          },
+          {
+            "symbol": "switch",
+            "bbox": [
+              158.5,
+              28.5,
+              6.1,
+              7.5
+            ],
+            "angle": 90,
+            "legend": false
+          },
+          {
+            "symbol": "switch",
+            "bbox": [
+              284.0,
+              208.5,
+              7.5,
+              6.1
+            ],
+            "angle": 180,
+            "legend": false
+          },
+          {
+            "symbol": "box",
+            "bbox": [
+              223.0,
+              30.0,
+              4.0,
+              4.0
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "box",
+            "bbox": [
+              223.0,
+              206.0,
+              4.0,
+              4.0
+            ],
+            "angle": 0.0,
+            "legend": false
+          }
+        ]
+      }
+    },
+    "plan-2pages.pdf": {
+      "units": "pt",
+      "pages": {
+        "1": [
+          {
+            "symbol": "socket",
+            "bbox": [
+              926.929,
+              102.047,
+              17.008,
+              17.008
+            ],
+            "angle": 0.0,
+            "legend": true
+          },
+          {
+            "symbol": "switch",
+            "bbox": [
+              931.181,
+              148.535,
+              21.26,
+              17.291
+            ],
+            "angle": 0.0,
+            "legend": true
+          },
+          {
+            "symbol": "lamp",
+            "bbox": [
+              925.512,
+              194.173,
+              19.843,
+              19.843
+            ],
+            "angle": 0.0,
+            "legend": true
+          },
+          {
+            "symbol": "box",
+            "bbox": [
+              929.764,
+              240.945,
+              11.339,
+              11.339
+            ],
+            "angle": 0.0,
+            "legend": true
+          },
+          {
+            "symbol": "lamp",
+            "bbox": [
+              259.37,
+              188.504,
+              19.843,
+              19.843
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              113.386,
+              161.575,
+              17.008,
+              17.008
+            ],
+            "angle": 90,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              113.386,
+              260.787,
+              17.008,
+              17.008
+            ],
+            "angle": 90,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              274.961,
+              56.693,
+              17.008,
+              17.008
+            ],
+            "angle": 180,
+            "legend": false
+          },
+          {
+            "symbol": "switch",
+            "bbox": [
+              392.598,
+              284.598,
+              21.26,
+              17.291
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "box",
+            "bbox": [
+              164.409,
+              85.039,
+              11.339,
+              11.339
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "lamp",
+            "bbox": [
+              259.37,
+              471.969,
+              19.843,
+              19.843
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              113.386,
+              416.693,
+              17.008,
+              17.008
+            ],
+            "angle": 90,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              408.189,
+              530.079,
+              17.008,
+              17.008
+            ],
+            "angle": 270,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              204.094,
+              606.614,
+              17.008,
+              17.008
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              317.48,
+              606.614,
+              17.008,
+              17.008
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "switch",
+            "bbox": [
+              131.811,
+              361.134,
+              21.26,
+              17.291
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "box",
+            "bbox": [
+              362.835,
+              377.008,
+              11.339,
+              11.339
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "lamp",
+            "bbox": [
+              528.661,
+              188.504,
+              19.843,
+              19.843
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "lamp",
+            "bbox": [
+              727.087,
+              188.504,
+              19.843,
+              19.843
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "lamp",
+            "bbox": [
+              528.661,
+              471.969,
+              19.843,
+              19.843
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "lamp",
+            "bbox": [
+              727.087,
+              471.969,
+              19.843,
+              19.843
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              833.386,
+              133.228,
+              17.008,
+              17.008
+            ],
+            "angle": 270,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              833.386,
+              303.307,
+              17.008,
+              17.008
+            ],
+            "angle": 270,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              833.386,
+              515.906,
+              17.008,
+              17.008
+            ],
+            "angle": 270,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              558.425,
+              56.693,
+              17.008,
+              17.008
+            ],
+            "angle": 180,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              700.157,
+              606.614,
+              17.008,
+              17.008
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              630.431,
+              325.428,
+              15.869,
+              18.981
+            ],
+            "angle": 30,
+            "legend": false
+          },
+          {
+            "symbol": "switch",
+            "bbox": [
+              449.291,
+              80.787,
+              17.291,
+              21.26
+            ],
+            "angle": 90,
+            "legend": false
+          },
+          {
+            "symbol": "switch",
+            "bbox": [
+              805.039,
+              591.024,
+              21.26,
+              17.291
+            ],
+            "angle": 180,
+            "legend": false
+          },
+          {
+            "symbol": "box",
+            "bbox": [
+              632.126,
+              85.039,
+              11.339,
+              11.339
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "box",
+            "bbox": [
+              632.126,
+              583.937,
+              11.339,
+              11.339
+            ],
+            "angle": 0.0,
+            "legend": false
+          }
+        ],
+        "2": [
+          {
+            "symbol": "socket",
+            "bbox": [
+              926.929,
+              102.047,
+              17.008,
+              17.008
+            ],
+            "angle": 0.0,
+            "legend": true
+          },
+          {
+            "symbol": "switch",
+            "bbox": [
+              931.181,
+              148.535,
+              21.26,
+              17.291
+            ],
+            "angle": 0.0,
+            "legend": true
+          },
+          {
+            "symbol": "lamp",
+            "bbox": [
+              925.512,
+              194.173,
+              19.843,
+              19.843
+            ],
+            "angle": 0.0,
+            "legend": true
+          },
+          {
+            "symbol": "box",
+            "bbox": [
+              929.764,
+              240.945,
+              11.339,
+              11.339
+            ],
+            "angle": 0.0,
+            "legend": true
+          },
+          {
+            "symbol": "lamp",
+            "bbox": [
+              216.85,
+              160.157,
+              19.843,
+              19.843
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "lamp",
+            "bbox": [
+              358.583,
+              160.157,
+              19.843,
+              19.843
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "lamp",
+            "bbox": [
+              216.85,
+              443.622,
+              19.843,
+              19.843
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "lamp",
+            "bbox": [
+              358.583,
+              443.622,
+              19.843,
+              19.843
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "lamp",
+            "bbox": [
+              656.22,
+              330.236,
+              19.843,
+              19.843
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              113.386,
+              133.228,
+              17.008,
+              17.008
+            ],
+            "angle": 90,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              113.386,
+              303.307,
+              17.008,
+              17.008
+            ],
+            "angle": 90,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              289.134,
+              56.693,
+              17.008,
+              17.008
+            ],
+            "angle": 180,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              464.882,
+              189.921,
+              17.008,
+              17.008
+            ],
+            "angle": 270,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              289.134,
+              606.614,
+              17.008,
+              17.008
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              833.386,
+              161.575,
+              17.008,
+              17.008
+            ],
+            "angle": 270,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              833.386,
+              445.039,
+              17.008,
+              17.008
+            ],
+            "angle": 270,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              657.638,
+              606.614,
+              17.008,
+              17.008
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              558.425,
+              56.693,
+              17.008,
+              17.008
+            ],
+            "angle": 180,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              291.625,
+              299.785,
+              18.04,
+              18.04
+            ],
+            "angle": 45,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              702.648,
+              192.412,
+              18.04,
+              18.04
+            ],
+            "angle": 135,
+            "legend": false
+          },
+          {
+            "symbol": "switch",
+            "bbox": [
+              500.315,
+              350.079,
+              17.291,
+              21.26
+            ],
+            "angle": 90,
+            "legend": false
+          },
+          {
+            "symbol": "switch",
+            "bbox": [
+              131.811,
+              525.543,
+              21.26,
+              17.291
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "switch",
+            "bbox": [
+              790.866,
+              80.787,
+              21.26,
+              17.291
+            ],
+            "angle": 180,
+            "legend": false
+          },
+          {
+            "symbol": "box",
+            "bbox": [
+              419.528,
+              79.37,
+              11.339,
+              11.339
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "box",
+            "bbox": [
+              759.685,
+              561.26,
+              11.339,
+              11.339
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "box",
+            "bbox": [
+              164.409,
+              575.433,
+              11.339,
+              11.339
+            ],
+            "angle": 0.0,
+            "legend": false
+          }
+        ]
+      }
+    },
+    "plan.dxf": {
+      "units": "pt на странице, которую строит бэкенд (масштаб 1:1, поля 5 мм)",
+      "pages": {
+        "1": [
+          {
+            "symbol": "socket",
+            "bbox": [
+              884.409,
+              102.047,
+              17.008,
+              17.008
+            ],
+            "angle": 0.0,
+            "legend": true
+          },
+          {
+            "symbol": "switch",
+            "bbox": [
+              888.661,
+              148.535,
+              21.26,
+              17.291
+            ],
+            "angle": 0.0,
+            "legend": true
+          },
+          {
+            "symbol": "lamp",
+            "bbox": [
+              882.992,
+              194.173,
+              19.843,
+              19.843
+            ],
+            "angle": 0.0,
+            "legend": true
+          },
+          {
+            "symbol": "box",
+            "bbox": [
+              887.244,
+              240.945,
+              11.339,
+              11.339
+            ],
+            "angle": 0.0,
+            "legend": true
+          },
+          {
+            "symbol": "lamp",
+            "bbox": [
+              216.85,
+              188.504,
+              19.843,
+              19.843
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              70.866,
+              161.575,
+              17.008,
+              17.008
+            ],
+            "angle": 90,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              70.866,
+              260.787,
+              17.008,
+              17.008
+            ],
+            "angle": 90,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              232.441,
+              56.693,
+              17.008,
+              17.008
+            ],
+            "angle": 180,
+            "legend": false
+          },
+          {
+            "symbol": "switch",
+            "bbox": [
+              350.079,
+              284.598,
+              21.26,
+              17.291
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "box",
+            "bbox": [
+              121.89,
+              85.039,
+              11.339,
+              11.339
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "lamp",
+            "bbox": [
+              216.85,
+              471.969,
+              19.843,
+              19.843
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              70.866,
+              416.693,
+              17.008,
+              17.008
+            ],
+            "angle": 90,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              365.669,
+              530.079,
+              17.008,
+              17.008
+            ],
+            "angle": 270,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              161.575,
+              606.614,
+              17.008,
+              17.008
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              274.961,
+              606.614,
+              17.008,
+              17.008
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "switch",
+            "bbox": [
+              89.291,
+              361.134,
+              21.26,
+              17.291
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "box",
+            "bbox": [
+              320.315,
+              377.008,
+              11.339,
+              11.339
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "lamp",
+            "bbox": [
+              486.142,
+              188.504,
+              19.843,
+              19.843
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "lamp",
+            "bbox": [
+              684.567,
+              188.504,
+              19.843,
+              19.843
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "lamp",
+            "bbox": [
+              486.142,
+              471.969,
+              19.843,
+              19.843
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "lamp",
+            "bbox": [
+              684.567,
+              471.969,
+              19.843,
+              19.843
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              790.866,
+              133.228,
+              17.008,
+              17.008
+            ],
+            "angle": 270,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              790.866,
+              303.307,
+              17.008,
+              17.008
+            ],
+            "angle": 270,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              790.866,
+              515.906,
+              17.008,
+              17.008
+            ],
+            "angle": 270,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              515.906,
+              56.693,
+              17.008,
+              17.008
+            ],
+            "angle": 180,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              657.638,
+              606.614,
+              17.008,
+              17.008
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "socket",
+            "bbox": [
+              587.911,
+              325.428,
+              15.869,
+              18.981
+            ],
+            "angle": 30,
+            "legend": false
+          },
+          {
+            "symbol": "switch",
+            "bbox": [
+              406.772,
+              80.787,
+              17.291,
+              21.26
+            ],
+            "angle": 90,
+            "legend": false
+          },
+          {
+            "symbol": "switch",
+            "bbox": [
+              762.52,
+              591.024,
+              21.26,
+              17.291
+            ],
+            "angle": 180,
+            "legend": false
+          },
+          {
+            "symbol": "box",
+            "bbox": [
+              589.606,
+              85.039,
+              11.339,
+              11.339
+            ],
+            "angle": 0.0,
+            "legend": false
+          },
+          {
+            "symbol": "box",
+            "bbox": [
+              589.606,
+              583.937,
+              11.339,
+              11.339
+            ],
+            "angle": 0.0,
+            "legend": false
+          }
+        ]
+      }
+    }
+  }
+}
