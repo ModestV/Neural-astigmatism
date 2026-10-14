@@ -1,9 +1,0 @@
-# Шаблон базовой модели. Скопируйте в <name>.yaml, где <name> совпадает с полем name.
-name: my-model                    # уникальное имя = имя файла без .yaml
-hf_id: org/model-name             # id на HuggingFace Hub
-owner: github-username            # кто отвечает за эту модель в команде
-max_seq_length: 2048
-gated: false                      # true, если модель требует HF_TOKEN и принятия лицензии
-lora_target_modules:              # слои, к которым крепится LoRA (зависят от архитектуры)
-  - q_proj
-  - v_proj

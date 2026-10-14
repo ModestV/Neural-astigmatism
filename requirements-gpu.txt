@@ -1,4 +1,0 @@
-# Только Linux/WSL + NVIDIA GPU (QLoRA и ускорение обучения)
--r requirements.txt
-bitsandbytes>=0.44
-unsloth

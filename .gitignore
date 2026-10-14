@@ -1,38 +1,22 @@
-# Секреты
-.env
-
 # Python
 __pycache__/
 *.py[cod]
-*.egg-info/
+.venv/
+venv/
 .pytest_cache/
 .ruff_cache/
-venv/
-.venv/
 
-# Данные: в git только README и .gitkeep
-data/**/*
-!data/**/
-!data/README.md
-!data/**/.gitkeep
+# Данные сервиса: загруженные чертежи, библиотека, история запусков
+/data/
 
-# Веса, чекпоинты, логи экспериментов
-outputs/
-mlruns/
-wandb/
-*.safetensors
-*.bin
-*.pt
-*.pth
-*.gguf
+# Node (подробнее — frontend/.gitignore)
+node_modules/
 
-# Jupyter
-.ipynb_checkpoints/
-
-# IDE / OS
-.vscode/
+# Редакторы
 .idea/
-.DS_Store
+.vscode/*
+!.vscode/extensions.json
 
-# Личные инструкции для ИИ-ассистентов
+# Секреты и личные инструкции для ИИ-ассистентов
+.env
 CLAUDE.local.md
