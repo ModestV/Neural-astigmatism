@@ -62,7 +62,7 @@ class Config(BaseModel):
 
     # --- отличающие части и соревнование ---
     discriminative_weight: float = 3.0
-    similar_cover: float = 0.85  # эталоны похожи, если один покрывает другой на эту долю
+    similar_cover: float = 0.6  # эталоны похожи, если один покрывает другой на эту долю
     similar_size_ratio: float = 1.5
     compete_iou: float = 0.5
     compete_margin: float = 0.03
@@ -87,6 +87,9 @@ class Config(BaseModel):
     min_blob_px: int = 8
     raster_chamfer_max: float = 0.08  # доля диагонали: порог среднего chamfer для гипотезы
     deskew: bool = False
+    # порог score для растра: по скелету любая плотная тушь покрывает эталон легче, чем в
+    # векторе (на синтетике TP: покрытие >= 0.97, ложные: медиана 0.90)
+    raster_accept_score: float = 0.9
     raster_white: int = 245  # яркость выше — заведомо не тушь (фон), отсекает шум Sauvola
     raster_black: int = 64  # яркость не выше — всегда тушь (заливка, где Sauvola дает дыры)
     raster_pyr_diag: float = 24.0  # диагональ эталона (px) в растре уточнения chamfer-поиска

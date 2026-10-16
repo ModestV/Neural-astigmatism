@@ -12,6 +12,7 @@ from symspot.core.config import Config
 from symspot.core.geometry_utils import (
     bbox_center,
     bbox_diag,
+    bbox_of_points,
     normalize_text,
     prim_length,
     prims_bbox,
@@ -207,7 +208,12 @@ def instance_bbox(query: Query, T: Similarity) -> BBox:
     tp = [transform_prim(p, T) for p in query.prims]
     b = prims_bbox(tp)
     if b is None:
-        b = _transform_ext(query_extent(query), T)
+        # растровый эталон без примитивов: плотная рамка трансформированных сэмплов
+        b = (
+            bbox_of_points(T.apply(query.samples))
+            if len(query.samples)
+            else _transform_ext(query_extent(query), T)
+        )
     if query.box is not None:
         ext = query_extent(query)
         m = np.mean(

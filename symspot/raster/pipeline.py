@@ -46,12 +46,13 @@ def run_raster(
             variants[s.legend_id] = q.variant + 1
             queries.append(q)
         queries = apply_discriminative_weights(queries, cfg)
+    vcfg = cfg.model_copy(update={"accept_score": max(cfg.accept_score, cfg.raster_accept_score)})
     found: list[Instance] = []
     for q in queries:
         with timer("chamfer"):
             hyps = nms_hypotheses(chamfer_search(q, prep, cfg), q.diag, cfg)
         with timer("verify"):
-            got = [verify_hypothesis(q, h, index, cfg) for h in hyps]
+            got = [verify_hypothesis(q, h, index, vcfg) for h in hyps]
         found += dedup_verified([i for i in got if i is not None])
     qmap = group_queries(queries)
     with timer("compete"):
