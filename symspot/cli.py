@@ -135,7 +135,7 @@ def _print_summary(result: Result, files: list[Path]) -> None:
     amb = Counter(i.legend_id for i in found if i.status == "ambiguous")
 
     table = Table(
-        title=f"{Path(result.drawing).name}: найдено {len(found)} (эталонов среди них: {n_query})"
+        title=f"{Path(result.drawing).name}: найдено {len(found)} (плюс {n_query} самих эталонов)"
     )
     table.add_column("класс")
     table.add_column("экземпляров", justify="right")
