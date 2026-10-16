@@ -1399,7 +1399,7 @@ requires-dist = [
     { name = "scikit-image", specifier = ">=0.22" },
     { name = "scipy", specifier = ">=1.11" },
     { name = "shapely", specifier = ">=2.0" },
-    { name = "streamlit", specifier = ">=1.35" },
+    { name = "streamlit", specifier = ">=1.66" },
     { name = "svgelements", specifier = ">=1.9" },
     { name = "typer", specifier = ">=0.12" },
 ]

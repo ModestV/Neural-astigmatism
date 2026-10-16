@@ -22,7 +22,7 @@ dependencies = [
     "typer>=0.12",
     "rich>=13.7",
     "cairosvg>=2.7",
-    "streamlit>=1.35",
+    "streamlit>=1.66",
 ]
 
 [project.scripts]

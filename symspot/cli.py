@@ -70,7 +70,7 @@ def _check_file(path: Path, what: str) -> None:
         raise CliError(f"{what} не найден: {path}")
 
 
-def _compute_metrics(result: Result, gt_path: Path, iou: float) -> dict:
+def compute_metrics(result: Result, gt_path: Path, iou: float) -> dict:
     from symspot.eval.metrics import evaluate
     from symspot.io.annotations import load_ground_truth, load_similar_groups
 
@@ -226,7 +226,7 @@ def run(
 
         metrics: dict | None = None
         if gt is not None:
-            metrics = _compute_metrics(result, gt, iou)
+            metrics = compute_metrics(result, gt, iou)
             metrics_path = out / "metrics.json"
             _write_json(metrics_path, metrics)
             files.append(metrics_path)
@@ -257,7 +257,7 @@ def eval_(
             result = Result.from_dict(data)
         except (json.JSONDecodeError, KeyError, TypeError) as e:
             raise CliError(f"{result_json}: не result.json SymSpot ({e!r})") from e
-        metrics = _compute_metrics(result, gt, iou)
+        metrics = compute_metrics(result, gt, iou)
         _print_metrics(metrics)
         if out is not None:
             out.parent.mkdir(parents=True, exist_ok=True)
