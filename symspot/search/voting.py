@@ -16,6 +16,7 @@ from symspot.query.descriptors import (
     KIND_TEXT,
     compute_anchors,
     pair_keys,
+    strokes_from_pieces,
 )
 from symspot.search.pairs import PairTable
 
@@ -105,7 +106,7 @@ def _vote_one(
     query: Query, prims_n: list, mirror: bool, table: PairTable, index: PrimIndex, cfg: Config
 ) -> list[Hypothesis]:
     """Голосование для эталона (уже отраженного, если ``mirror``)."""
-    qa = compute_anchors(prims_n)
+    qa = compute_anchors(strokes_from_pieces(prims_n))
     n = len(qa)
     if n < 2 or len(table) == 0:
         return []

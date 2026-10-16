@@ -8,7 +8,7 @@ import numpy as np
 from scipy.spatial import cKDTree
 
 from symspot.core.config import Config
-from symspot.core.geometry_utils import bbox_diag, bbox_iou
+from symspot.core.geometry_utils import bbox_area, bbox_diag
 from symspot.core.types import Instance, Query
 from symspot.normalize.index import PrimIndex
 from symspot.verify.coverage import CoverageReport, coverage_report
@@ -21,6 +21,15 @@ def query_for(instance: Instance, queries: dict[str, list[Query]]) -> Query:
         if q.variant == instance.variant:
             return q
     return qs[0]
+
+
+def overlap_min(a, b) -> float:
+    """Пересечение рамок, деленное на площадь меньшей. В отличие от IoU ловит вложенные
+    символы (duplex внутри рамки GFCI: IoU ~0.4, но это одно место на чертеже)."""
+    ix = max(0.0, min(a[2], b[2]) - max(a[0], b[0]))
+    iy = max(0.0, min(a[3], b[3]) - max(a[1], b[1]))
+    m = min(bbox_area(a), bbox_area(b))
+    return ix * iy / m if m > 0 else 0.0
 
 
 def _evidence(
@@ -81,7 +90,8 @@ def compete(
     index: PrimIndex,
     cfg: Config,
 ) -> list[Instance]:
-    """Экземпляры разных классов с IoU рамок > ``compete_iou`` сравниваются: побеждает
+    """Экземпляры разных классов с перекрытием рамок (пересечение / меньшая площадь) >
+    ``compete_iou`` сравниваются: побеждает
     больший score с отрывом >= ``compete_margin`` (проигравший удаляется), иначе оба
     остаются со ``status="ambiguous"`` и взаимными ``rivals``. Score в соревновании учитывает
     отличающие части обоих эталонов (присутствие отличающих частей соперника на чертеже —
@@ -117,7 +127,7 @@ def compete(
                 break
             if instances[a].legend_id == instances[b].legend_id:
                 continue
-            iou = bbox_iou(instances[a].bbox, instances[b].bbox)
+            iou = overlap_min(instances[a].bbox, instances[b].bbox)
             if iou > cfg.compete_iou:
                 pairs.append((iou, int(a), int(b)))
     pairs.sort(key=lambda t: -t[0])

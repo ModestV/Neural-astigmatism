@@ -9,14 +9,15 @@ from scipy.spatial import cKDTree
 
 from symspot.core.config import Config
 from symspot.normalize.index import PrimIndex
-from symspot.query.descriptors import Anchors, compute_anchors, pair_keys
+from symspot.query.descriptors import Anchors, compute_anchors, pair_keys, strokes_from_pieces
 
 
 @dataclass
 class PairTable:
     """Пары кусков чертежа (a, b) с якорями ближе ``radius``; ``keys`` отсортированы.
 
-    ``a``, ``b`` — индексы в ``index.prims``; ``anchors`` — якоря всех ``index.prims``.
+    Пары строятся по штрихам (``strokes_from_pieces`` от кусков индекса): ``strokes`` —
+    восстановленные штрихи, ``a``, ``b`` — индексы в ``strokes``, ``anchors`` — их якоря.
     Каждая неупорядоченная пара хранится один раз как упорядоченная (a < b); сторона
     эталона перебирает оба порядка.
     """
@@ -26,14 +27,16 @@ class PairTable:
     b: np.ndarray
     anchors: Anchors
     radius: float
+    strokes: list | None = None
 
     @staticmethod
     def build(index: PrimIndex, radius: float, cfg: Config) -> PairTable:
-        anchors = compute_anchors(index.prims)
+        strokes = strokes_from_pieces(index.prims)
+        anchors = compute_anchors(strokes)
         n = len(anchors)
         if n < 2:
             e = np.empty(0, dtype=np.int64)
-            return PairTable(e, e, e, anchors, radius)
+            return PairTable(e, e, e, anchors, radius, strokes)
         tree = cKDTree(anchors.pos)
         k = min(cfg.max_pairs_per_piece + 1, n)
         dist, nbr = tree.query(anchors.pos, k=k, distance_upper_bound=radius)
@@ -48,7 +51,7 @@ class PairTable:
         keys, rows = pair_keys(anchors, a, b, cfg, spread=False)
         a, b = a[rows], b[rows]
         order = np.argsort(keys, kind="stable")
-        return PairTable(keys[order], a[order], b[order], anchors, radius)
+        return PairTable(keys[order], a[order], b[order], anchors, radius, strokes)
 
     def lookup(self, keys: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
         """Для массива ключей -> (k, row): keys[k] совпал со строкой таблицы row."""

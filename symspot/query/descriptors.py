@@ -217,3 +217,109 @@ def pair_keys(
         kr = np.unique(kr, axis=0)
         return kr[:, 0].copy(), kr[:, 1].copy()
     return keys_f.copy(), rows_f.copy()
+
+
+# Допуск склейки угловых интервалов кусков дуги одного штриха (радианы).
+_ANGLE_EPS = 1e-6
+
+
+def _merge_arc_intervals(pieces: list[Arc]) -> tuple[float, float] | None:
+    """Угловой диапазон штриха по его кускам: (t0, t1) или None для полной окружности."""
+    iv: list[tuple[float, float]] = []
+    for p in pieces:
+        if p.is_full:
+            return None
+        a = p.t0 % _TWO_PI
+        b = a + (p.t1 - p.t0)
+        if b > _TWO_PI:
+            iv.append((a, _TWO_PI))
+            iv.append((0.0, b - _TWO_PI))
+        else:
+            iv.append((a, b))
+    iv.sort()
+    merged: list[list[float]] = []
+    for a, b in iv:
+        if merged and a <= merged[-1][1] + _ANGLE_EPS:
+            merged[-1][1] = max(merged[-1][1], b)
+        else:
+            merged.append([a, b])
+    covered = sum(b - a for a, b in merged)
+    if covered >= _TWO_PI - 1e-3:
+        return None
+    # дуга = дополнение к самому большому промежутку
+    gaps = []
+    for k in range(len(merged)):
+        end = merged[k][1]
+        nxt = merged[(k + 1) % len(merged)][0] + (_TWO_PI if k == len(merged) - 1 else 0.0)
+        gaps.append((nxt - end, k))
+    _, k = max(gaps)
+    t0 = merged[(k + 1) % len(merged)][0]
+    t1 = merged[k][1]
+    if t1 <= t0:
+        t1 += _TWO_PI
+    return t0, t1
+
+
+def strokes_from_pieces(prims: Sequence[Primitive]) -> list[Primitive]:
+    """Восстановить штрихи (примитивы до планаризации) из кусков по ``stroke_id``.
+
+    Ключи пар считаются по штрихам: они не зависят от того, как планаризация разрезала
+    линии (стена через символ режет его отрезки, касание диагонали режет окружность).
+    Отрезки штриха -> один отрезок по крайним проекциям, дуги -> одна дуга или окружность,
+    текст и смешанные группы остаются как есть.
+    """
+    groups: dict[int, list[Primitive]] = {}
+    order: list[int] = []
+    out_text: list[tuple[int, Primitive]] = []
+    for pos, p in enumerate(prims):
+        if isinstance(p, TextPrim):
+            out_text.append((pos, p))
+            continue
+        sid = p.stroke_id if p.stroke_id >= 0 else -(p.id + 1)
+        if sid not in groups:
+            groups[sid] = []
+            order.append(sid)
+        groups[sid].append(p)
+    out: list[Primitive] = []
+    for sid in order:
+        g = groups[sid]
+        if len(g) == 1:
+            out.append(g[0])
+        elif all(isinstance(p, Segment) for p in g):
+            longest = max(g, key=lambda p: math.hypot(p.p1[0] - p.p0[0], p.p1[1] - p.p0[1]))
+            o = np.array(longest.p0)
+            v = np.array(longest.p1) - o
+            v = v / max(np.hypot(v[0], v[1]), 1e-12)
+            pts = np.array([q for p in g for q in (p.p0, p.p1)], dtype=float)
+            t = (pts - o) @ v
+            a, b = o + t.min() * v, o + t.max() * v
+            out.append(
+                Segment(
+                    longest.id,
+                    (float(a[0]), float(a[1])),
+                    (float(b[0]), float(b[1])),
+                    longest.parent_id,
+                    longest.style,
+                    longest.stroke_id,
+                )
+            )
+        elif all(isinstance(p, Arc) for p in g):
+            longest = max(g, key=lambda p: p.r * (p.t1 - p.t0))
+            rng = _merge_arc_intervals(g)  # type: ignore[arg-type]
+            t0, t1 = (0.0, _TWO_PI) if rng is None else rng
+            out.append(
+                Arc(
+                    longest.id,
+                    longest.center,
+                    longest.r,
+                    t0,
+                    t1,
+                    longest.parent_id,
+                    longest.style,
+                    longest.stroke_id,
+                )
+            )
+        else:
+            out.extend(g)
+    out.extend(p for _, p in out_text)
+    return out
