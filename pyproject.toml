@@ -45,7 +45,7 @@ addopts = "-m 'not bench'"
 [tool.ruff]
 line-length = 100
 target-version = "py311"
-extend-exclude = ["symbol_spotting", "src", "scripts", "notebooks", "experiments", "paper"]
+extend-exclude = [".claude", "symbol_spotting", "src", "scripts", "notebooks", "experiments", "paper"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
