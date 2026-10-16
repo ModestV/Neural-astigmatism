@@ -1,11 +1,25 @@
-# CLAUDE.md
+# SymSpot
 
-Project instructions live in AGENTS.md (shared by all AI assistants used by the team):
+Поиск обозначений на чертежах по эталонам с того же чертежа, с раскраской линий символов.
+Полный план и архитектура: `docs/PLAN.md` — читать перед любой задачей.
 
-@AGENTS.md
+## Роли
+- Главная сессия (Opus) — оркестратор: контракты, алгоритмическое ядро, интеграция, ревью.
+- Реализация периферии и тесты делегируются сабагентам на Sonnet (`.claude/agents/`):
+  `sonnet-implementer`, `sonnet-tester`, `sonnet-viz`. Правила делегирования — `docs/PLAN.md`, раздел 0.
 
-## Claude Code specifics
+## Команды
+- Установка: `uv sync`
+- Тесты: `uv run pytest -q`
+- Линт: `uv run ruff check . && uv run ruff format --check .`
+- Синтетика: `uv run python -m symspot.synth --n 20 --size small --seed 0 --out data/synth`
+- Запуск: `uv run symspot run <drawing> --queries <coco.json> --out out/`
 
-- Before editing a folder, read its `README.md`.
-- Ask before adding dependencies or changing the config contract — it affects every team member.
-- Personal, machine-specific notes go to `CLAUDE.local.md` (git-ignored), not here.
+## Соглашения
+- Python 3.11, типы везде, dataclass/pydantic, без глобального состояния.
+- `symspot/core/types.py` меняет только главная сессия.
+- Все пороги — в `core/config.py`, никаких магических чисел в коде.
+- Координаты: единицы чертежа, ось Y вниз (как в PDF/SVG после чтения).
+- Каждый модуль покрыт тестами в `tests/` с тем же путём.
+- Данные `data/real/` не коммитить.
+- Коммиты маленькие, по одной задаче; сообщение: `phaseN/taskID: что сделано`.

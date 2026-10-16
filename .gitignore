@@ -36,3 +36,7 @@ wandb/
 
 # Личные инструкции для ИИ-ассистентов
 CLAUDE.local.md
+
+# SymSpot
+out/
+*.prof

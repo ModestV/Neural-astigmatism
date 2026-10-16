@@ -1,33 +1,52 @@
 [build-system]
-requires = ["setuptools>=68"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling>=1.24"]
+build-backend = "hatchling.build"
 
 [project]
-name = "peft-lab"
+name = "symspot"
 version = "0.1.0"
-description = "Локальное PEFT-дообучение LLM: LoRA/QLoRA/DoRA, переносимые адаптеры, контроль catastrophic forgetting"
+description = "Поиск обозначений на чертежах по эталонам с того же чертежа, с раскраской линий символов"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11,<3.14"
 license = "MIT"
-dynamic = ["dependencies"]
+dependencies = [
+    "numpy>=1.26",
+    "scipy>=1.11",
+    "shapely>=2.0",
+    "pymupdf>=1.24",
+    "svgelements>=1.9",
+    "opencv-python-headless>=4.9",
+    "scikit-image>=0.22",
+    "pydantic>=2.6",
+    "pyyaml>=6.0",
+    "typer>=0.12",
+    "rich>=13.7",
+    "cairosvg>=2.7",
+    "streamlit>=1.35",
+]
 
-[tool.setuptools.dynamic]
-dependencies = { file = ["requirements.txt"] }
+[project.scripts]
+symspot = "symspot.cli:app"
 
-[tool.setuptools.packages.find]
-where = ["src"]
+[dependency-groups]
+dev = ["pytest>=8.0", "ruff>=0.5"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["symspot"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["src"]
 markers = [
-    "gpu: тест требует NVIDIA GPU",
-    "slow: долгий тест (загрузка моделей, обучение)",
+    "slow: долгий тест (large-синтетика, бенчмарк)",
+    "bench: бенчмарк производительности",
 ]
+addopts = "-m 'not bench'"
 
 [tool.ruff]
 line-length = 100
-target-version = "py310"
+target-version = "py311"
+extend-exclude = ["symbol_spotting", "src", "scripts", "notebooks", "experiments", "paper"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
+ignore = ["E741"]

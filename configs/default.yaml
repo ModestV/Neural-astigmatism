@@ -1,0 +1,24 @@
+# Конфиг SymSpot по умолчанию (PLAN.md, раздел 5). Полный список полей: symspot/core/config.py
+sample_step: 0.02          # доля диагонали эталона
+flatten_tol: 0.002
+arc_fit_tol: 0.01
+merge_gap: 0.005
+query_parent_inside: 0.8
+pair_radius_factor: 1.5
+scale_min: 0.7
+scale_max: 1.4
+allow_mirror: true
+angle_bin_deg: 5
+scale_bin_log: 0.05
+min_distinct_pairs: 3
+max_hypotheses_per_query: 2000
+cover_tol: 0.03
+min_prim_coverage: 0.6
+accept_score: 0.8
+discriminative_weight: 3.0
+compete_margin: 0.03
+assign_inside: 0.7
+expand_score: 0.9
+raster_angle_step: 10
+raster_tile: 2048
+workers: auto
