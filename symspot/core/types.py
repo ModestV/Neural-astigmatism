@@ -286,6 +286,7 @@ class Query:
     label: str | None = None
     piece_ids: list[int] = field(default_factory=list)  # куски чертежа, из которых взят эталон
     variant: int = 0
+    box: BBox | None = None  # рамка эталона в нормализованных координатах
 
     @property
     def texts(self) -> list[str]:
