@@ -3,7 +3,9 @@
 Метрики (metrics.py) работают только с этими классами. Если формат датасета изменится,
 достаточно дописать здесь новый загрузчик — сами метрики трогать не придётся.
 
-Поддерживаемые форматы (оба — JSON одинаковой формы, см. samples/ground_truth.json):
+Поддерживаемые форматы (определяются по содержимому файла):
+
+1. Наш JSON — разметка и ответы одинаковой формы, см. samples/ground_truth.json:
 
     {
       "symbols": {"socket": "Розетка", ...},          # необязательно: ключ → название
@@ -21,7 +23,15 @@
       }
     }
 
-Рамки — в единицах страницы, ось Y вниз (как во всём проекте).
+2. COCO (например, выгрузка из CVAT) — разметка: {"images", "annotations", "categories"}.
+   Каждая картинка — отдельный чертёж из одного листа, обозначение — имя категории,
+   угол — атрибут CVAT "rotation". Категория legend_item считается таблицей обозначений.
+
+3. COCO results — ответы алгоритма: [{"image_id", "category_id", "bbox", "score"}, ...].
+   Номера картинок и категорий берутся из COCO-разметки (load_predictions).
+
+Рамки — [x, y, w, h], ось Y вниз (как во всём проекте). Единицы — как в источнике:
+единицы страницы для нашего формата, пиксели для COCO.
 """
 
 from __future__ import annotations
@@ -70,13 +80,105 @@ class DatasetFormatError(ValueError):
     """Файл разметки или ответов не удалось разобрать."""
 
 
-def load(path: Path) -> Annotations:
-    """Читает разметку или ответы алгоритма в формате, описанном в docstring модуля."""
+LEGEND_CATEGORIES = {"legend_item"}
+"""Категории COCO, которые обозначают экземпляры в таблице условных обозначений."""
+
+
+def load(*paths: Path) -> Annotations:
+    """Читает разметку (наш формат или COCO) или ответы в нашем формате.
+
+    Несколько файлов объединяются — например, по одному COCO-файлу на чертёж.
+    """
+    return merge([_parse(_read(p), str(p)) for p in paths])
+
+
+def load_predictions(path: Path, truth_paths: list[Path]) -> Annotations:
+    """Читает ответы алгоритма: наш формат или COCO results.
+
+    Для COCO results нужна COCO-разметка (truth_paths), чтобы перевести номера картинок
+    и категорий в имена файлов и обозначений.
+    """
+    data = _read(path)
+    if not isinstance(data, list):
+        return _parse(data, str(path))
+    images: dict[int, set[str]] = {}
+    categories: dict[int, set[str]] = {}
+    for truth_path in truth_paths:
+        coco = _read(truth_path)
+        if not _is_coco(coco):
+            continue
+        for image in coco["images"]:
+            images.setdefault(image["id"], set()).add(image["file_name"])
+        for cat in coco["categories"]:
+            categories.setdefault(cat["id"], set()).add(cat["name"])
+    if not images:
+        raise DatasetFormatError(f"{path}: ответы в формате COCO results требуют COCO-разметку")
+    result = Annotations()
+    for n, item in enumerate(data):
+        where = f"{path}: ответ {n + 1}"
+        try:
+            file = item.get("file_name") or _only(images[item["image_id"]], "картинка", where)
+            symbol = _only(categories[item["category_id"]], "категория", where)
+        except KeyError as exc:
+            raise DatasetFormatError(f"{where}: в разметке нет номера {exc}") from exc
+        result.instances.append(_instance(file, "1", {**item, "symbol": symbol}, where))
+    return result
+
+
+def merge(parts: list[Annotations]) -> Annotations:
+    result = Annotations()
+    for part in parts:
+        result.instances += part.instances
+        result.symbol_names.update(part.symbol_names)
+        result.times.update(part.times)
+        result.detector = result.detector or part.detector
+    return result
+
+
+def _read(path: Path):
     try:
-        data = json.loads(Path(path).read_text(encoding="utf-8"))
+        return json.loads(Path(path).read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         raise DatasetFormatError(f"{path}: {exc}") from exc
-    return from_dict(data, source=str(path))
+
+
+def _parse(data, source: str) -> Annotations:
+    return from_coco(data, source) if _is_coco(data) else from_dict(data, source)
+
+
+def _is_coco(data) -> bool:
+    return isinstance(data, dict) and {"images", "annotations", "categories"} <= data.keys()
+
+
+def _only(values: set[str], what: str, where: str) -> str:
+    if len(values) != 1:
+        raise DatasetFormatError(
+            f"{where}: {what} с этим номером неоднозначна ({', '.join(sorted(values))}); "
+            "укажите в ответе file_name или оценивайте по одному файлу разметки"
+        )
+    return next(iter(values))
+
+
+def from_coco(data: dict, source: str = "<coco>") -> Annotations:
+    """COCO-разметка → внутренний вид. Картинка — чертёж из одного листа."""
+    categories = {c["id"]: c["name"] for c in data["categories"]}
+    images = {i["id"]: i["file_name"] for i in data["images"]}
+    result = Annotations()
+    for n, ann in enumerate(data["annotations"]):
+        where = f"{source}: аннотация {ann.get('id', n + 1)}"
+        try:
+            file, symbol = images[ann["image_id"]], categories[ann["category_id"]]
+        except KeyError as exc:
+            raise DatasetFormatError(f"{where}: нет картинки или категории {exc}") from exc
+        attributes = ann.get("attributes") or {}
+        item = {
+            "symbol": symbol,
+            "bbox": ann.get("bbox"),
+            "angle": attributes.get("rotation", 0.0),
+            "legend": symbol in LEGEND_CATEGORIES,
+        }
+        result.instances.append(_instance(file, "1", item, where))
+    return result
 
 
 def from_dict(data: dict, source: str = "<dict>") -> Annotations:

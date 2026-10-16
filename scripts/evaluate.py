@@ -4,9 +4,10 @@
     backend/.venv/bin/python scripts/evaluate.py --detector my            # свой алгоритм
     backend/.venv/bin/python scripts/evaluate.py --pred answers.json      # готовые ответы
     backend/.venv/bin/python scripts/evaluate.py --simulate               # проверка самих метрик
+    backend/.venv/bin/python scripts/evaluate.py --gt datasets/x/*.json --pred results.json
 
-Разметка (--gt) и ответы (--pred) — JSON в формате samples/ground_truth.json,
-подробности в backend/app/evaluation/dataset.py.
+Разметка (--gt): наш JSON (как samples/ground_truth.json) или COCO, можно несколько файлов.
+Ответы (--pred): наш JSON или COCO results. Подробности — backend/app/evaluation/dataset.py.
 
 Результат — в report/results/<алгоритм>/:
   predictions.json   ответы алгоритма (если он запускался)
@@ -27,7 +28,7 @@ sys.path.insert(0, str(ROOT / "backend"))
 
 from app.detection import DETECTORS, get_detector
 from app.evaluation import Annotations, Instance, evaluate, load, save
-from app.evaluation.dataset import DatasetFormatError
+from app.evaluation.dataset import DatasetFormatError, load_predictions
 from app.evaluation.report import fmt, write_all
 from app.evaluation.run import RunError, run_detector
 from app.models import SearchParams
@@ -36,9 +37,9 @@ from app.models import SearchParams
 def main() -> int:
     args = parse_args()
     try:
-        truth = load(args.gt)
+        truth = load(*args.gt)
         if args.pred:
-            predictions = load(args.pred)
+            predictions = load_predictions(args.pred, args.gt)
             name = predictions.detector or args.pred.stem
         elif args.simulate:
             predictions = simulate(truth, random.Random(args.seed))
@@ -48,7 +49,7 @@ def main() -> int:
             print(f"Алгоритм «{detector.name}»: {detector.description}")
             params = SearchParams(threshold=args.score_threshold or 0.8)
             predictions = run_detector(
-                detector, truth, args.drawings or args.gt.parent, params, progress=print
+                detector, truth, args.drawings or args.gt[0].parent, params, progress=print
             )
             name = detector.name
     except (DatasetFormatError, RunError, ValueError) as exc:
@@ -69,7 +70,11 @@ def main() -> int:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Метрики качества поиска условных обозначений")
     parser.add_argument(
-        "--gt", type=Path, default=ROOT / "samples" / "ground_truth.json", help="разметка"
+        "--gt",
+        type=Path,
+        nargs="+",
+        default=[ROOT / "samples" / "ground_truth.json"],
+        help="разметка: наш JSON или COCO, можно несколько файлов",
     )
     source = parser.add_mutually_exclusive_group()
     source.add_argument(
@@ -138,14 +143,15 @@ def simulate(truth: Annotations, rng: random.Random) -> Annotations:
 
 def print_summary(report) -> None:
     o = report.overall
+    width = max([len("обозначение"), *(len(s.symbol) for s in report.per_symbol)]) + 2
     print(
         f"\nIoU ≥ {report.iou_threshold}, уверенность ≥ {report.score_threshold}\n"
-        f"{'обозначение':<14}{'эталон':>7}{'TP':>5}{'FP':>5}{'FN':>5}"
+        f"{'обозначение':<{width}}{'эталон':>7}{'TP':>5}{'FP':>5}{'FN':>5}"
         f"{'P':>8}{'R':>8}{'F1':>8}{'IoU':>8}{'AP':>8}"
     )
     for s in [*report.per_symbol, o]:
         print(
-            f"{s.symbol:<14}{s.n_truth:>7}{s.tp:>5}{s.fp:>5}{s.fn:>5}"
+            f"{s.symbol:<{width}}{s.n_truth:>7}{s.tp:>5}{s.fp:>5}{s.fn:>5}"
             f"{fmt(s.precision):>8}{fmt(s.recall):>8}{fmt(s.f1):>8}{fmt(s.mean_iou):>8}"
             f"{fmt(s.ap):>8}"
         )

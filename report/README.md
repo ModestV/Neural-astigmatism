@@ -23,7 +23,12 @@ backend/.venv/bin/python scripts/evaluate.py --detector my         # свой а
 backend/.venv/bin/python scripts/evaluate.py --pred answers.json   # готовые ответы, без запуска алгоритма
 backend/.venv/bin/python scripts/evaluate.py --simulate            # «шумная» разметка вместо алгоритма
 backend/.venv/bin/python scripts/evaluate.py --gt other/gt.json --drawings other/  # другой датасет
+backend/.venv/bin/python scripts/evaluate.py --gt datasets/electrical-plans/annotations/*.json --pred results.json
 ```
+
+Разметка (`--gt`) — наш JSON или COCO, можно несколько файлов сразу. Ответы (`--pred`) — наш JSON
+или COCO results (`[{"image_id", "category_id", "bbox", "score"}]`). Подробнее о форматах —
+[datasets/README.md](../datasets/README.md).
 
 Параметры: `--iou 0.5` — порог IoU, `--score-threshold 0` — отбросить неуверенные ответы,
 `--include-legend` — оценивать и таблицу условных обозначений.

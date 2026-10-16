@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 from app.detection import get_detector
 from app.evaluation import Annotations, Instance, evaluate, iou, load, save
-from app.evaluation.dataset import DatasetFormatError, from_dict
+from app.evaluation.dataset import DatasetFormatError, from_dict, load_predictions
 from app.evaluation.metrics import average_precision, match, pr_curve
 from app.evaluation.report import write_all
 from app.evaluation.run import run_detector
@@ -205,6 +205,103 @@ def test_bad_format(data):
         from_dict(data)
 
 
+# --- COCO ------------------------------------------------------------------------
+
+
+def coco(file_name: str = "plan.jpg", image_id: int = 1, annotations: list | None = None) -> dict:
+    return {
+        "images": [{"id": image_id, "file_name": file_name, "width": 100, "height": 100}],
+        "categories": [
+            {"id": 1, "name": "switch"},
+            {"id": 2, "name": "light"},
+            {"id": 3, "name": "legend_item"},
+        ],
+        "annotations": annotations
+        if annotations is not None
+        else [
+            {
+                "id": 1,
+                "image_id": image_id,
+                "category_id": 1,
+                "bbox": [10, 10, 5, 8],
+                "attributes": {"occluded": False, "rotation": 90.0},
+            },
+            {"id": 2, "image_id": image_id, "category_id": 2, "bbox": [50, 50, 6, 6]},
+            {"id": 3, "image_id": image_id, "category_id": 3, "bbox": [80, 5, 10, 10]},
+        ],
+    }
+
+
+def write_json(path: Path, data) -> Path:
+    path.write_text(json.dumps(data))
+    return path
+
+
+def test_load_coco(tmp_path):
+    truth = load(write_json(tmp_path / "gt.json", coco()))
+    assert truth.files == ["plan.jpg"]
+    switch, light, legend = truth.instances
+    assert (switch.symbol, switch.page, switch.bbox, switch.angle) == (
+        "switch",
+        1,
+        (10, 10, 5, 8),
+        90,
+    )
+    assert light.symbol == "light" and not light.legend
+    assert legend.legend
+
+
+def test_load_several_coco_files(tmp_path):
+    a = write_json(tmp_path / "a.json", coco("a.jpg"))
+    b = write_json(tmp_path / "b.json", coco("b.jpg"))
+    truth = load(a, b)
+    assert truth.files == ["a.jpg", "b.jpg"]
+    assert len(truth.instances) == 6
+
+
+def test_coco_results(tmp_path):
+    gt_path = write_json(tmp_path / "gt.json", coco())
+    results = [
+        {"image_id": 1, "category_id": 1, "bbox": [10, 10, 5, 8], "score": 0.9},
+        {"image_id": 1, "category_id": 2, "bbox": [0, 0, 6, 6], "score": 0.4},
+    ]
+    predictions = load_predictions(write_json(tmp_path / "res.json", results), [gt_path])
+    assert [(p.file, p.symbol, p.score) for p in predictions.instances] == [
+        ("plan.jpg", "switch", 0.9),
+        ("plan.jpg", "light", 0.4),
+    ]
+    o = evaluate(load(gt_path), predictions).overall
+    assert (o.tp, o.fp, o.fn) == (1, 1, 1)  # legend_item не оценивается
+
+
+def test_coco_results_ambiguous_image_id(tmp_path):
+    gts = [write_json(tmp_path / f"{n}.json", coco(f"{n}.jpg")) for n in "ab"]
+    res = write_json(
+        tmp_path / "res.json", [{"image_id": 1, "category_id": 1, "bbox": [0, 0, 1, 1]}]
+    )
+    with pytest.raises(DatasetFormatError, match="неоднозначна"):
+        load_predictions(res, gts)
+    named = write_json(
+        tmp_path / "named.json",
+        [{"image_id": 1, "file_name": "b.jpg", "category_id": 1, "bbox": [0, 0, 1, 1]}],
+    )
+    assert load_predictions(named, gts).instances[0].file == "b.jpg"
+
+
+def test_coco_results_need_coco_ground_truth(tmp_path):
+    res = write_json(
+        tmp_path / "res.json", [{"image_id": 1, "category_id": 1, "bbox": [0, 0, 1, 1]}]
+    )
+    with pytest.raises(DatasetFormatError, match="COCO"):
+        load_predictions(res, [SAMPLES / "ground_truth.json"])
+
+
+def test_bad_coco(tmp_path):
+    data = coco(annotations=[{"id": 1, "image_id": 7, "category_id": 1, "bbox": [0, 0, 1, 1]}])
+    with pytest.raises(DatasetFormatError):
+        load(write_json(tmp_path / "gt.json", data))
+
+
 # --- прогон алгоритма и командная строка --------------------------------------
 
 
@@ -244,3 +341,29 @@ def test_cli_simulate(tmp_path):
     assert metrics["detector"] == "simulated"
     assert 0 < metrics["overall"]["recall"] < 1
     assert (tmp_path / "predictions.json").is_file()
+
+
+def test_cli_coco_with_coco_results(tmp_path):
+    gt_path = write_json(tmp_path / "gt.json", coco())
+    res = write_json(
+        tmp_path / "res.json",
+        [{"image_id": 1, "category_id": 2, "bbox": [50, 50, 6, 6], "score": 0.8}],
+    )
+    out = tmp_path / "out"
+    subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "scripts" / "evaluate.py"),
+            "--gt",
+            str(gt_path),
+            "--pred",
+            str(res),
+            "--out",
+            str(out),
+        ],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    metrics = json.loads((out / "metrics.json").read_text())
+    assert (metrics["overall"]["tp"], metrics["overall"]["fn"]) == (1, 1)
