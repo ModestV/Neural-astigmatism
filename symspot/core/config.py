@@ -87,6 +87,18 @@ class Config(BaseModel):
     min_blob_px: int = 8
     raster_chamfer_max: float = 0.08  # доля диагонали: порог среднего chamfer для гипотезы
     deskew: bool = False
+    raster_white: int = 245  # яркость выше — заведомо не тушь (фон), отсекает шум Sauvola
+    raster_black: int = 64  # яркость не выше — всегда тушь (заливка, где Sauvola дает дыры)
+    raster_pyr_diag: float = 24.0  # диагональ эталона (px) в растре уточнения chamfer-поиска
+    raster_dense_diag: float = 12.0  # то же для плотного грубого прохода
+    raster_dense_pts: int = 30  # число точек шаблона в плотном проходе
+    raster_dense_excess: float = 0.02  # вес штрафа за избыток туши вокруг центра в плотном проходе
+    raster_rev_weight: float = 0.1  # вес приближенного обратного chamfer при переборе поз
+    raster_template_pts: int = 60  # число точек шаблона при уточнении
+    raster_trunc: float = 0.2  # усечение chamfer-расстояния, доля диагонали шаблона
+    raster_cand_k: int = 12000  # число лучших минимумов плотного прохода
+    raster_rev_top: int = 8000  # число уточненных кандидатов с точным обратным chamfer
+    raster_refine_top: int = 8000  # число лучших поз грубого прохода, идущих в уточнение
 
     # --- производительность ---
     workers: int | str = "auto"
