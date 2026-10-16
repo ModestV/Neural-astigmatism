@@ -5,7 +5,6 @@ from __future__ import annotations
 import dataclasses
 import math
 
-import numpy as np
 from scipy.spatial import cKDTree
 
 from symspot.core.config import Config
@@ -13,6 +12,7 @@ from symspot.core.geometry_utils import bbox_expand
 from symspot.core.types import Instance, Query, TextPrim
 from symspot.normalize.index import PrimIndex
 from symspot.verify.coverage import coverage_report, sample_half_width
+from symspot.verify.icp import match_points
 
 
 def assign_pieces(instance: Instance, query: Query, index: PrimIndex, cfg: Config) -> Instance:
@@ -40,13 +40,9 @@ def assign_pieces(instance: Instance, query: Query, index: PrimIndex, cfg: Confi
                 continue
             sp = index.samples[s0:s1]
             st = index.tangents[s0:s1]
-            d, j = tree.query(sp, k=1, distance_upper_bound=tol + float(hw[s0:s1].max()))
-            ok = np.isfinite(d)
-            if ok.any():
-                jj = np.where(ok, j, 0)
-                cosv = np.abs((Pt[jj] * st).sum(1))
-                ok &= cosv >= cos_min
-                ok &= d <= tol + hw[s0:s1]
+            lim = tol + hw[s0:s1]
+            d, j = match_points(sp, st, P, Pt, tree, lim, cos_min)
+            ok = j >= 0
             if ok.mean() >= cfg.assign_inside:
                 piece_ids.append(p.id)
                 parent_ids.add(p.parent_id)

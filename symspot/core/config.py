@@ -62,7 +62,7 @@ class Config(BaseModel):
 
     # --- отличающие части и соревнование ---
     discriminative_weight: float = 3.0
-    similar_chamfer: float = 0.05  # доля диагонали: эталоны с меньшим chamfer считаются похожими
+    similar_cover: float = 0.85  # эталоны похожи, если один покрывает другой на эту долю
     similar_size_ratio: float = 1.5
     compete_iou: float = 0.5
     compete_margin: float = 0.03
