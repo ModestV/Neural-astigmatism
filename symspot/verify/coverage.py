@@ -19,10 +19,38 @@ from symspot.core.geometry_utils import (
 )
 from symspot.core.types import BBox, Hypothesis, Instance, Query, Similarity, TextPrim
 from symspot.normalize.index import PrimIndex
-from symspot.verify.icp import icp_refine, match_points
+from symspot.verify.icp import (
+    ICP_START_RADIUS,
+    ICP_START_RADIUS_TEXT,
+    icp_refine,
+    match_points,
+)
 
 # Текст эталона ищется на чертеже в пределах этой доли диагонали его рамки от ожидаемого центра.
-TEXT_CENTER_TOL = 0.6
+TEXT_CENTER_TOL = 1.0
+# Штрих, выходящий за область экземпляра больше чем на эту долю диагонали, считается
+# проходящим насквозь и не входит в лишнюю тушь.
+PASS_THROUGH_MARGIN = 0.25
+
+
+def stroke_bboxes(index: PrimIndex) -> np.ndarray:
+    """Рамка штриха (все куски с тем же ``stroke_id``) для каждого примитива индекса
+    (запоминается в индексе)."""
+    sb = getattr(index, "_symspot_stroke_bbox", None)
+    if sb is None or len(sb) != len(index.prims):
+        sids = np.array(
+            [p.stroke_id if p.stroke_id >= 0 else -(p.id + 1) for p in index.prims], dtype=np.int64
+        )
+        sb = np.array(index.bboxes, dtype=float).reshape(-1, 4).copy()
+        if len(sids):
+            uniq, inv = np.unique(sids, return_inverse=True)
+            mn = np.full((len(uniq), 2), np.inf)
+            mx = np.full((len(uniq), 2), -np.inf)
+            np.minimum.at(mn, inv, sb[:, :2])
+            np.maximum.at(mx, inv, sb[:, 2:])
+            sb = np.concatenate([mn[inv], mx[inv]], axis=1)
+        index._symspot_stroke_bbox = sb  # type: ignore[attr-defined]
+    return sb
 
 
 def sample_half_width(index: PrimIndex) -> np.ndarray:
@@ -138,6 +166,19 @@ def coverage_report(query: Query, T: Similarity, index: PrimIndex, cfg: Config) 
                 & (local[:, 1] >= ext[1])
                 & (local[:, 1] <= ext[3])
             )
+            if inside.any() and len(index.prims):
+                # линии, проходящие насквозь (их штрих выходит далеко за область), — не тушь
+                # символа: стена или размерная линия через символ не штрафуется
+                sb = stroke_bboxes(index)[index.sample_prim[near]]
+                box_d = _transform_ext(ext, T)
+                m = PASS_THROUGH_MARGIN * T.s
+                contained = (
+                    (sb[:, 0] >= box_d[0] - m)
+                    & (sb[:, 1] >= box_d[1] - m)
+                    & (sb[:, 2] <= box_d[2] + m)
+                    & (sb[:, 3] <= box_d[3] + m)
+                )
+                inside &= contained
             if inside.any() and len(query.samples):
                 qtree = cKDTree(query.samples)
                 dd, _ = qtree.query(local[inside], k=1)
@@ -202,7 +243,8 @@ def verify_hypothesis(
       score < ``accept_score``.
     """
     if len(query.samples) >= 3:
-        T, residual = icp_refine(query, hyp.T, index, cfg)
+        r0 = ICP_START_RADIUS_TEXT if hyp.source == "text" else ICP_START_RADIUS
+        T, residual = icp_refine(query, hyp.T, index, cfg, start_radius=r0)
         if not math.isfinite(residual):
             return None
     else:

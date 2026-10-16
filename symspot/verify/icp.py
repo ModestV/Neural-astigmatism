@@ -15,7 +15,14 @@ from symspot.normalize.index import PrimIndex
 K_NEIGHBORS = 6
 # Начальный радиус сопоставления ICP в долях диагонали экземпляра; сужается до cover_tol.
 ICP_START_RADIUS = 0.15
+# Для гипотез от текста: центр рамки текста смещен относительно глифов (асимметрия
+# надстрочных и подстрочных), при повороте на 180° смещение удваивается.
+ICP_START_RADIUS_TEXT = 0.35
 MIN_MATCHES = 3
+# Доля итераций ICP в режиме точка-прямая; остальные — точка-точка.
+POINT_TO_LINE_FRAC = 0.66
+# Отношение сингулярных чисел облака сэмплов, ниже которого эталон считается «линейным».
+DEGENERATE_RATIO = 0.05
 
 
 def match_points(
@@ -56,8 +63,20 @@ def match_points(
     return dist_out, idx_out
 
 
+def is_degenerate(pts: np.ndarray) -> bool:
+    """Точки почти на одной прямой: подобие по ним не определяется (масштаб, поворот)."""
+    if len(pts) < 3:
+        return True
+    sv = np.linalg.svd(pts - pts.mean(0), compute_uv=False)
+    return bool(sv[1] < DEGENERATE_RATIO * sv[0])
+
+
 def icp_refine(
-    query: Query, T: Similarity, index: PrimIndex, cfg: Config
+    query: Query,
+    T: Similarity,
+    index: PrimIndex,
+    cfg: Config,
+    start_radius: float = ICP_START_RADIUS,
 ) -> tuple[Similarity, float]:
     """Уточнить T: сэмплы эталона -> ближайшие сэмплы чертежа (согласованные касательные,
     < ``icp_angle_deg``), Umeyama с сохранением ``T.mirror``, до ``icp_iters`` итераций.
@@ -72,12 +91,13 @@ def icp_refine(
     src_t = base.apply_vec(query.tangents)
     w = query.weights
     cur = Similarity(T.s, T.theta, T.tx, T.ty, False)
+    degenerate = is_degenerate(query.samples)
     cos_min = math.cos(math.radians(cfg.icp_angle_deg))
     residual = math.inf
     n_it = max(1, cfg.icp_iters)
     for it in range(n_it):
         frac = it / max(1, n_it - 1)
-        rad_rel = ICP_START_RADIUS * (1 - frac) + 1.5 * cfg.cover_tol * frac
+        rad_rel = start_radius * (1 - frac) + 1.5 * cfg.cover_tol * frac
         radius = rad_rel * cur.s
         P = cur.apply(src)
         Pt = cur.apply_vec(src_t)
@@ -88,12 +108,21 @@ def icp_refine(
         # точка на касательной прямой сэмпла чертежа, ближайшая к P (точка-прямая)
         q = index.samples[idx[m]]
         qt = index.tangents[idx[m]]
-        proj = ((P[m] - q) * qt).sum(1)
-        target = q + proj[:, None] * qt
-        try:
-            new = umeyama(src[m], target, allow_mirror=False, weights=w[m])
-        except ValueError:
-            return T, math.inf
+        if frac < POINT_TO_LINE_FRAC:
+            proj = ((P[m] - q) * qt).sum(1)
+            target = q + proj[:, None] * qt
+        else:
+            # точка-точка: фиксирует сдвиг вдоль линий (короткие отрезки, концы)
+            target = q
+        if degenerate:
+            # геометрия на одной прямой: масштаб и поворот берутся из гипотезы
+            shift = np.average(target - P[m], axis=0, weights=w[m])
+            new = Similarity(cur.s, cur.theta, cur.tx + shift[0], cur.ty + shift[1], False)
+        else:
+            try:
+                new = umeyama(src[m], target, allow_mirror=False, weights=w[m])
+            except ValueError:
+                return T, math.inf
         if new.s <= 0 or not math.isfinite(new.s):
             return T, math.inf
         delta = (

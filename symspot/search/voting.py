@@ -227,7 +227,7 @@ def text_hypotheses(query: Query, index: PrimIndex, cfg: Config) -> list[Hypothe
             T0 = Similarity(s, theta, 0.0, 0.0)
             p = T0.apply(qc)
             T = Similarity(s, theta, float(dc[0] - p[0]), float(dc[1] - p[1]))
-            hyps.append(Hypothesis(query.legend_id, T, 1.0, "vote", query.variant))
+            hyps.append(Hypothesis(query.legend_id, T, 1.0, "text", query.variant))
     return hyps
 
 

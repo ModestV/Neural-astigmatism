@@ -304,7 +304,7 @@ class Hypothesis:
     legend_id: str
     T: Similarity
     votes: float
-    source: Literal["exact", "vote", "expand", "chamfer"]
+    source: Literal["exact", "vote", "expand", "chamfer", "text"]
     variant: int = 0
 
 
