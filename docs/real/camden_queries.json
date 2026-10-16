@@ -1,0 +1,77 @@
+{
+ "image": "00_reference_camden_E1-1.pdf",
+ "width": 2592,
+ "height": 1728,
+ "legend_items": [
+  {
+   "legend_id": "A",
+   "bbox": [
+    1239.92,
+    178.88,
+    1324.8,
+    227.76
+   ],
+   "label": "2x4 LED lay-in"
+  },
+  {
+   "legend_id": "B",
+   "bbox": [
+    1240.42,
+    233.98,
+    1324.3,
+    263.86
+   ],
+   "label": "4 ft surface LED"
+  },
+  {
+   "legend_id": "C",
+   "bbox": [
+    1266.32,
+    282.92,
+    1298.52,
+    306.12
+   ],
+   "label": "LED wall pack"
+  },
+  {
+   "legend_id": "D",
+   "bbox": [
+    1243.66,
+    320.98,
+    1321.06,
+    359.38
+   ],
+   "label": "High bay LED"
+  },
+  {
+   "legend_id": "E",
+   "bbox": [
+    1271.32,
+    369.88,
+    1293.4,
+    391.96
+   ],
+   "label": "Exhaust fan"
+  },
+  {
+   "legend_id": "X",
+   "bbox": [
+    1271.44,
+    405.76,
+    1293.4,
+    427.96
+   ],
+   "label": "LED exit sign"
+  },
+  {
+   "legend_id": "Z",
+   "bbox": [
+    1272.66,
+    438.66,
+    1292.06,
+    467.18
+   ],
+   "label": "Emergency light"
+  }
+ ]
+}
