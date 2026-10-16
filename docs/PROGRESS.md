@@ -28,3 +28,18 @@
 ### Открытые вопросы
 - Реальных данных (`data/real/`, `instances_Train.json`, JPG 7200x4800) в репозитории и на
   диске нет. Фаза 7 потребует их; до тех пор работа идет на синтетике.
+
+## Фаза 1 и ядро фазы 3 (в работе)
+
+- T2 (ридеры PDF/SVG) и T3 (аннотации, метрики) приняты и закоммичены. В метриках при
+  сопоставлении пара одного класса получает надбавку к IoU (SAME_CLASS_BONUS).
+- Ядро 3.1-3.8 написано (черновик): extract, descriptors, pairs, voting, icp, coverage,
+  discriminative, compete, assign, resolve, expand, плюс `pipeline.run_vector`. Smoke-тест
+  на ручном чертеже (40 экземпляров, повороты, зеркала, похожие классы) дает F1 = 1.0.
+  Тестов sonnet-tester по спецификации ядра еще нет.
+- Растр: `raster/verify_raster.py` (RasterIndex по скелету, эталон из скелета) написан, не
+  проверен; `raster/pipeline.py` еще не создан.
+- В работе у сабагентов (отдельные worktree в `.claude/worktrees/`, без коммитов):
+  T1 `t1-synth`, T4 `t4-render`, T5 `t5-normalize`.
+- Isolation `worktree` у Agent создает worktree от origin/main (без symspot). Решение:
+  создавать worktree вручную от HEAD `claude_mvp` и указывать путь в брифе.
