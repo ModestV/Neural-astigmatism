@@ -1,0 +1,10 @@
+# Сами чертежи и картинки в git не кладём (они на Google Drive, см. README.md)
+drawings/
+images/
+*.pdf
+*.svg
+*.png
+*.jpg
+*.jpeg
+*.zip
+*.7z
