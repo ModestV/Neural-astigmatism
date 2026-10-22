@@ -20,3 +20,4 @@ node_modules/
 # Секреты и личные инструкции для ИИ-ассистентов
 .env
 CLAUDE.local.md
+.claude/
