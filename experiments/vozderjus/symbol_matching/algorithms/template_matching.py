@@ -9,6 +9,49 @@ from algorithms.common import nms
 from models import Box, Detection, Settings
 
 
+def peak_locations(
+    response: Any,
+    threshold: float,
+    width: int,
+    height: int,
+    limit: int,
+) -> tuple[list[tuple[float, int, int]], bool]:
+    """Тот же жадный максимум с подавлением; пересчитываем лишь затронутые плитки."""
+    import heapq
+    import cv2
+
+    tile = 128
+    rows, columns = response.shape
+    horizontal = (columns + tile - 1) // tile
+    vertical = (rows + tile - 1) // tile
+    revisions = [0] * (horizontal * vertical)
+    heap = []
+
+    def update(index: int) -> None:
+        top, left = (index // horizontal) * tile, (index % horizontal) * tile
+        _, score, _, (x, y) = cv2.minMaxLoc(response[top : top + tile, left : left + tile])
+        if score >= threshold:
+            heapq.heappush(heap, (-score, top + y, left + x, index, revisions[index]))
+
+    for index in range(len(revisions)):
+        update(index)
+    found = []
+    while heap and len(found) < limit:
+        negative, y, x, index, revision = heapq.heappop(heap)
+        if revision != revisions[index]:
+            continue
+        found.append((-negative, x, y))
+        left, right = max(0, x - width // 2), min(columns, x + width // 2 + 1)
+        top, bottom = max(0, y - height // 2), min(rows, y + height // 2 + 1)
+        response[top:bottom, left:right] = -1
+        for ty in range(top // tile, (bottom - 1) // tile + 1):
+            for tx in range(left // tile, (right - 1) // tile + 1):
+                changed = ty * horizontal + tx
+                revisions[changed] += 1
+                update(changed)
+    return found, len(found) == limit
+
+
 def detect(
     target: Any, template: Any, template_id: str, symbol: str, settings: Settings
 ) -> tuple[list[Detection], dict]:
@@ -40,10 +83,11 @@ def detect(
             response = cv2.matchTemplate(source_ink, transformed, cv2.TM_CCORR_NORMED)
             response = np.nan_to_num(response, nan=-1, posinf=-1, neginf=-1)
             tried += 1
-            for _ in range(settings.max_detections):
-                _, score, _, (x, y) = cv2.minMaxLoc(response)
-                if score < settings.template_threshold:
-                    break
+            peaks, hit_limit = peak_locations(
+                response, settings.template_threshold, out_w, out_h, settings.max_detections
+            )
+            truncated = truncated or hit_limit
+            for score, x, y in peaks:
                 found.append(
                     Detection(
                         symbol=symbol,
@@ -54,13 +98,6 @@ def detect(
                         scale=scale,
                     )
                 )
-                # Подавление соседних пиков; общая NMS применяется после перебора.
-                response[
-                    max(0, y - out_h // 2) : y + out_h // 2 + 1,
-                    max(0, x - out_w // 2) : x + out_w // 2 + 1,
-                ] = -1
-            else:
-                truncated = True
     return nms(found, settings.nms_iou, settings.max_detections), {
         "status": "ok" if tried else "no_valid_transform",
         "transforms": tried,

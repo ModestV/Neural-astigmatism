@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Разметка ИУО</title><link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+<header><div><strong>Разметка ИУО</strong><span class="sub">Локальное исследование · vozderjus</span></div>
+  <div class="header-actions"><span id="save-status" role="status">Загрузка…</span>
+    <button id="save">Сохранить</button><button id="download">Скачать копию</button>
+    <button id="export" class="primary">Экспорт текущего листа</button></div></header>
+<div id="message" role="alert" hidden></div>
+<main>
+<aside class="left">
+  <h2>Чертежи <span id="page-count" class="badge"></span></h2>
+  <div id="pages" class="page-list"></div>
+  <div class="section-heading"><h2>ИУО на листе</h2><button id="new-symbol">+ Класс</button></div>
+  <p class="hint">Галочка выбирает класс для исследования. Нажмите строку, чтобы размечать этот класс.</p>
+  <input id="search" type="search" placeholder="Номер или название ИУО" aria-label="Поиск класса">
+  <div id="symbols" class="symbol-list"></div>
+  <details><summary>Замечания при импорте</summary><ul id="warnings"></ul></details>
+</aside>
+<section class="center">
+  <div class="toolbar">
+    <div class="tools" aria-label="Режим"><button data-mode="select" class="active">Выбор V</button>
+      <button data-mode="draw">Рамка R</button><button data-mode="pan">Рука H</button></div>
+    <button id="undo" title="Отменить: Cmd/Ctrl+Z">↶</button>
+    <button id="redo" title="Повторить: Cmd/Ctrl+Shift+Z">↷</button>
+    <span class="spacer"></span><button id="zoom-out" aria-label="Уменьшить">−</button>
+    <span id="zoom-label">100%</span><button id="zoom-in" aria-label="Увеличить">+</button>
+    <button id="fit">Весь лист</button>
+    <label class="quality">Чёткость <select id="dpi"><option>100</option><option selected>150</option><option>200</option></select></label>
+  </div>
+  <div id="viewport" tabindex="0" aria-label="Чертёж: колесо — масштаб, пробел и перетаскивание — перемещение">
+    <div id="stage"><img id="page-image" alt="Страница чертежа" draggable="false">
+      <svg id="boxes" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    <div id="loading">Подготовка страницы…</div>
+  </div>
+  <div class="footer"><span id="page-info"></span><span>Колесо: масштаб · Пробел: перемещение · Delete: удалить</span></div>
+</section>
+<aside class="right">
+  <h2>Текущий класс</h2><label>Название <input id="symbol-name" maxlength="200"></label>
+  <button id="rename-symbol">Переименовать</button>
+  <label class="review"><input type="checkbox" id="reviewed">Все экземпляры этого класса на листе проверены</label>
+  <p class="hint">Импорт не подтверждает полноту разметки. Пока класс не проверен, метрики для него не вычисляются.</p>
+  <h2>Выбранная рамка</h2><div id="empty-selection" class="hint">Нарисуйте рамку или выберите существующую.</div>
+  <div id="details" hidden>
+    <label>Класс <select id="mark-symbol"></select></label>
+    <div class="coordinates">
+      <label>X<input id="box-x" type="number" step="0.1" min="0"></label>
+      <label>Y<input id="box-y" type="number" step="0.1" min="0"></label>
+      <label>Ширина<input id="box-w" type="number" step="0.1" min="0.1"></label>
+      <label>Высота<input id="box-h" type="number" step="0.1" min="0.1"></label>
+    </div><button id="apply-box">Применить координаты</button>
+    <label class="check"><input id="legend" type="checkbox">Элемент легенды</label>
+    <label class="check"><input id="template" type="checkbox">Использовать как образец поиска</label>
+    <p class="hint">Выбор образца также включает его класс в исследование. Одна и та же рамка передаётся всем алгоритмам.</p>
+    <button id="delete" class="danger">Удалить рамку</button>
+  </div>
+  <h2>Экземпляры класса <span id="mark-count" class="badge"></span></h2>
+  <div id="marks" class="mark-list"></div>
+</aside>
+</main>
+<dialog id="export-dialog"><h2>Конфигурация сохранена</h2>
+  <p>Этот файл можно передать в <code>run_benchmark.py run --config</code>.</p>
+  <textarea id="export-path" readonly aria-label="Путь конфигурации"></textarea>
+  <div id="export-warnings"></div><button id="close-dialog" class="primary">Понятно</button></dialog>
+</body></html>

@@ -106,3 +106,14 @@ cd frontend && npm install && npm run lint && npm run build
 Исследование запускается автономно через `run_benchmark.py` (команды `inspect`, `prepare`, `select-template`, `run`).
 Конфигурации и небольшая разметка — в `annotations/`; рамки в единицах видимой страницы PDF. Без разметки метрики не вычисляются.
 Проверки исследования — `backend/tests/test_symbol_matching_experiment.py`. Экспериментальные алгоритмы пока не зарегистрированы в веб-сервисе.
+
+Редактор исследования — `experiments/vozderjus/symbol_matching/annotate.py`;
+локальный интерфейс — `annotation_ui/`, импорт COCO и сохранение — `annotation_core.py`.
+Рабочая копия — `annotations/workspace.json`, исходная COCO-разметка не перезаписывается.
+Экспорт текущего листа совместим с benchmark; непроверенная разметка даёт ground_truth=null.
+Резервные копии редактора исключены из Git. Проверки — `backend/tests/test_symbol_annotation.py`.
+
+Исследование на первичной COCO-разметке — `experiments/vozderjus/symbol_matching/study.py`.
+Протокол и разбиение calibration/test фиксируются в `PROTOCOL.md` до получения результатов.
+Признаки страницы ORB/SIFT переиспользуются между запросами; лимит детекций применяется на запрос.
+Проверки протокола исследования — `backend/tests/test_symbol_study.py`.

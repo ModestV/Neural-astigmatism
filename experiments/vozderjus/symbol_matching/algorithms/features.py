@@ -9,6 +9,21 @@ from algorithms.common import nms
 from models import Box, Detection, Settings
 
 
+def prepare_target(target: Any, settings: Settings, method: str) -> tuple[Any, Any]:
+    """Один раз выделить признаки страницы для поиска нескольких образцов."""
+    import cv2
+
+    if method == "orb":
+        extractor = cv2.ORB_create(
+            nfeatures=settings.features,
+            edgeThreshold=7,
+            patchSize=15,
+        )
+    else:
+        extractor = cv2.SIFT_create(nfeatures=settings.features)
+    return extractor.detectAndCompute(target, None)
+
+
 def detect(
     target: Any,
     template: Any,
@@ -16,6 +31,7 @@ def detect(
     symbol: str,
     settings: Settings,
     method: str,
+    target_features: tuple[Any, Any] | None = None,
 ) -> tuple[list[Detection], dict]:
     """Оценить перенос, поворот и равномерный масштаб по локальным признакам."""
     import cv2
@@ -33,7 +49,9 @@ def detect(
         extractor = cv2.SIFT_create(nfeatures=settings.features)
         norm = cv2.NORM_L2
     source_kp, source_desc = extractor.detectAndCompute(template, None)
-    target_kp, target_desc = extractor.detectAndCompute(target, None)
+    target_kp, target_desc = (
+        extractor.detectAndCompute(target, None) if target_features is None else target_features
+    )
     info = {
         "template_keypoints": len(source_kp),
         "target_keypoints": len(target_kp),

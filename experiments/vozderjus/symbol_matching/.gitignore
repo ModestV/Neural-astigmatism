@@ -9,3 +9,7 @@
 !/results/README.md
 __pycache__/
 *.py[cod]
+
+# Резервные копии редактора
+/annotations/.annotation_backups/
+/annotations/*.tmp
