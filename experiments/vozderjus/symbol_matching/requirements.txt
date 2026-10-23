@@ -1,0 +1,3 @@
+# Устанавливать из корня репозитория через backend/.venv/bin/python -m pip install -r ...
+-r ../../../backend/requirements.txt
+pydantic==2.14.1

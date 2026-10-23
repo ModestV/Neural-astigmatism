@@ -4,3 +4,5 @@ python-multipart==0.0.32
 pymupdf==1.28.2
 ezdxf==1.4.4
 pillow==12.3.0
+opencv-python==4.13.0.92
+numpy==2.5.4

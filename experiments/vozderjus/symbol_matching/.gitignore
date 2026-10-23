@@ -1,4 +1,4 @@
-# Локальные данные исследования. Описания источников остаются в README.md.
+# Локальные исходники и производные данные. Описания можно отслеживать.
 /drawings/*
 !/drawings/.gitkeep
 !/drawings/README.md
@@ -7,3 +7,5 @@
 /results/*
 !/results/.gitkeep
 !/results/README.md
+__pycache__/
+*.py[cod]

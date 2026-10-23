@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "description": "Проверка запуска на реальном PDF. Образец подвесного светильника выбран вручную в легенде. Это не эталонная разметка и не оценка качества.",
+  "templates": [
+    {
+      "id": "riga_pendant",
+      "symbol": "pendant_lamp",
+      "file": "чертежи/01_riga_lighting.pdf",
+      "page": 1,
+      "bbox": {
+        "x": 644,
+        "y": 277,
+        "w": 39,
+        "h": 35
+      }
+    }
+  ],
+  "targets": [
+    {
+      "file": "чертежи/01_riga_lighting.pdf",
+      "page": 1,
+      "ground_truth": null,
+      "ignore_regions": [
+        {
+          "x": 628,
+          "y": 181,
+          "w": 285,
+          "h": 215
+        }
+      ]
+    }
+  ]
+}

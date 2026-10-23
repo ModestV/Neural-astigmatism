@@ -102,3 +102,7 @@ cd frontend && npm install && npm run lint && npm run build
 Исследование ORB+RANSAC, SIFT+RANSAC и Template Matching участника vozderjus размещается в
 `experiments/vozderjus/symbol_matching/`; исходные PDF (`drawings/`), кэш (`cache/`) и результаты
 (`results/`) локальные и исключены из Git правилами внутри папки исследования.
+
+Исследование запускается автономно через `run_benchmark.py` (команды `inspect`, `prepare`, `select-template`, `run`).
+Конфигурации и небольшая разметка — в `annotations/`; рамки в единицах видимой страницы PDF. Без разметки метрики не вычисляются.
+Проверки исследования — `backend/tests/test_symbol_matching_experiment.py`. Экспериментальные алгоритмы пока не зарегистрированы в веб-сервисе.
