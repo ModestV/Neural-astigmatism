@@ -98,3 +98,7 @@ cd frontend && npm install && npm run lint && npm run build
 - **Таблица условных обозначений (легенда)** — блок на листе с образцами и расшифровкой; экземпляры
   в ней размечены флагом `legend`.
 - **RANSAC** — оценка преобразования по случайным выборкам соответствий с отбором согласованных точек.
+
+Исследование ORB+RANSAC, SIFT+RANSAC и Template Matching участника vozderjus размещается в
+`experiments/vozderjus/symbol_matching/`; исходные PDF (`drawings/`), кэш (`cache/`) и результаты
+(`results/`) локальные и исключены из Git правилами внутри папки исследования.

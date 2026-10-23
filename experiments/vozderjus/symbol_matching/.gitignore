@@ -1,0 +1,9 @@
+# Локальные данные исследования. Описания источников остаются в README.md.
+/drawings/*
+!/drawings/.gitkeep
+!/drawings/README.md
+/cache/*
+!/cache/.gitkeep
+/results/*
+!/results/.gitkeep
+!/results/README.md
